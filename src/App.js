@@ -1,20 +1,43 @@
 import { Container } from 'react-bootstrap'
-import './App.css';
-import Nav from './components/NavBar';
-import Header from './components/Header';
-
+import React, { useState } from 'react'
+import NavBar from './components/NavBar'
+import Header from './components/Header'
+import Category from './components/Category'
+import ItemsList from './components/ItemList'
+import { items } from './data'
 function App() {
-  return (
-    <div className='color-body font'>
-    <Nav/>
-    <Header/>
-    <Container>
+  const [itemsData, setItemsData] = useState(items)
 
-      
-    </Container>
-    
+  //get all cat uniqe
+  const allCategory = ['All', ...new Set(items.map((i) => i.category))]
+
+  //filter by category
+  const filterbyCategory = (cat) => {
+    if (cat === "All") {
+      setItemsData(items)
+    } else {
+      const newArr = items.filter((item) => item.category === cat)
+      setItemsData(newArr)
+    }
+  }
+
+  //filter by search form
+  const filterbySearch = (word) => {
+    if (word !== "") {
+      const newArr = items.filter((item) => item.category === word)
+      setItemsData(newArr)
+    }
+  }
+
+  return (
+    <div className="color-body font">
+      <NavBar filterbySearch={filterbySearch} />
+      <Container>
+        <Header />
+        <Category filterbyCategory={filterbyCategory} allCategory={allCategory} />
+        <ItemsList itemsData={itemsData} />
+      </Container>
     </div>
-    
   );
 }
 
